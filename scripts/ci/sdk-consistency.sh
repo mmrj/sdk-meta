@@ -17,7 +17,7 @@ for file in ./data/*.json; do
     continue
   fi
   jq -r 'keys[]' "$file" | sort > "$file.keys"
-  if diff -q sdks.json.keys "$file.keys" > /dev/null; then
+  if diff -q ./data/sdks.json.keys "$file.keys" > /dev/null; then
     echo "$file is consistent"
   else
     echo "$file is missing some SDK IDs:"
