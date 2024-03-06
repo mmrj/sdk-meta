@@ -20,7 +20,7 @@ jobs:
           git diff-index --quiet HEAD --
       - name: Validate JSON schemas
         run: |
-          ./scripts/ci/validate-json-schemas.sh
+          ./scripts/ci/check-json-schemas.sh
       - name: Validate all SDKs are represented in data files
         run: |
           ./scripts/ci/sdk-consistency.sh
