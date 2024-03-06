@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://launchdarkly.com/sdk-meta/types.json",
+  "title": "SDK Types",
+  "description": "List of SDK types",
+  "type": "object",
+  "$defs": {
+    "SDKType" : {
+      "type" : "string",
+       "description" : "The primary deployment strategy for a LaunchDarkly SDK",
+       "enum" : ["client-side", "server-side", "edge"]
+    }
+  },
+  "patternProperties" : {
+    "^[a-z-]+$" : {
+      "$ref" : "#/$defs/SDKType"
+      }
+    }
+  }
