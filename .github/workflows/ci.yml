@@ -1,0 +1,26 @@
+name: CI
+on:
+  push:
+    branches: [ 'main' ]
+    paths-ignore:
+      - '**.md' # Don't run CI on markdown changes.
+  pull_request:
+    branches: [ 'main', 'feat/**' ]
+    paths-ignore:
+      - '**.md'
+
+jobs:
+  lints:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate JSON Formatting
+        run: |
+          ./scripts/ci/format-json.sh
+          git diff-index --quiet HEAD --
+      - name: Validate JSON schemas
+        run: |
+          ./scripts/ci/validate-json-schemas.sh
+      - name: Validate all SDKs are represented in data files
+        run: |
+          ./scripts/ci/sdk-consistency.sh
