@@ -27,8 +27,12 @@ jobs:
           add-paths: |
             ${{ env.DB_NAME }}
             ${{ env.METADATA_DIR }}
+            products
           branch: "metadata-update"
           author: "LaunchDarklyReleaseBot <LaunchDarklyReleaseBot@launchdarkly.com>"
           committer: "LaunchDarklyReleaseBot <LaunchDarklyReleaseBot@launchdarkly.com>"
           title: "feat: update metadata"
           commit-message: "Updates SDK metadata"
+          body: |
+            SDK metadata has changed. This PR updates the existing `metadata.sqlite3` database and associated
+            data products. 
