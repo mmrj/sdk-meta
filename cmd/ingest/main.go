@@ -73,6 +73,11 @@ type metadataV1 struct {
 	UserAgent string   `json:"user-agent"`
 	Type      string   `json:"type"`
 	Languages []string `json:"languages"`
+	Features  map[string]struct {
+		Introduced string  `json:"introduced"`
+		Deprecated *string `json:"deprecated"`
+		Removed    *string `json:"removed"`
+	} `json:"features"`
 }
 type metadataCollection struct {
 	Version int `json:"version"`
@@ -163,6 +168,7 @@ func run(args *args) error {
 			}
 			return nil
 		},
+		"features": insertFeatures,
 	}
 
 	tx, err := db.Begin()
@@ -226,4 +232,20 @@ func insertRepo(tx *sql.Tx, id string, repo string) error {
 	defer stmt.Close()
 	_, err = stmt.Exec(id, repo)
 	return err
+}
+
+func insertFeatures(tx *sql.Tx, id string, metadata *metadataV1) error {
+	// Todo: how to handle the empty string/nil values
+	stmt, err := tx.Prepare("INSERT INTO sdk_features (id, feature, introduced, deprecated, removed) VALUES (?, ?, ?, ?, ?)")
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+	for feature, info := range metadata.Features {
+		_, err = stmt.Exec(id, feature, info.Introduced, info.Deprecated, info.Removed)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 }

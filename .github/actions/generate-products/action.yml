@@ -1,8 +1,0 @@
-name: Generate Data Products
-
-runs:
-  using: composite
-  steps:
-    - uses: actions/checkout@v4
-    - name: Generate Products
-    run: ./scripts/generate-products.sh

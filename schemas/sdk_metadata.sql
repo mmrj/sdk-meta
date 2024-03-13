@@ -29,9 +29,9 @@ CREATE TABLE sdk_type_info (
 CREATE TABLE sdk_features (
     id TEXT,
     feature TEXT NOT NULL,
-    introduced DATE NOT NULL,
-    deprecated DATE,
-    removed DATE,
+    introduced TEXT NOT NULL,
+    deprecated TEXT,
+    removed TEXT,
     PRIMARY KEY (id, feature),
     FOREIGN KEY (feature) REFERENCES sdk_feature_info(feature)
 );

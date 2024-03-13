@@ -14,6 +14,5 @@ sqlite3 -json metadata.sqlite3 "SELECT * from sdk_types;" |
 sqlite3 -json metadata.sqlite3 "SELECT * from sdk_repos;" |
   jq 'reduce .[] as $item ({}; .[$item.id] += {github: $item.github})' > products/repos.json
 
-# Do it for sdk_features. Noting that it should contain 'introduced' and 'deprecated' and 'removed' (only if non null in row.)
 sqlite3 -json metadata.sqlite3 "SELECT * from sdk_features;" |
-  jq 'reduce .[] as $item ({}; .[$item.id] += {introduced: $item.introduced, deprecated: $item.deprecated, removed: $item.removed})' > products/features.json
+  jq 'reduce .[] as $item ({}; .[$item.id] = {($item.feature): {introduced: $item.introduced, deprecated: $item.deprecated, removed: $item.removed}})' > products/features.json
