@@ -16,10 +16,13 @@ The data is intended for consumption by downstream products and services.
 
 ## structure
 
-This repo is essentially a JSON database hosted on Github. 
+This repo contains an sqlite database containing a snapshot of SDK metadata
+fetched from individual repos.
 
-The "tables" live in [`data`](./products) and the schemas for those tables live in [`schemas`](./schemas). When adding
-a new table, ensure it has a corresponding schema.
+It also contains JSON files that are derived from the database. These are intended for
+consumption by downstream products and services.
+
+The JSON data products live in [`products`](./products) and the schemas for them live in [`schemas`](./schemas). 
 
 Data can be validated against the schemas using `./scripts/ci/check-json-schemas.sh` on Linux.
 
