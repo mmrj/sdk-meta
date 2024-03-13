@@ -1,0 +1,34 @@
+name: Crawl Repos
+on:
+  schedule:
+    - cron: '0 7 * * *'
+  workflow_dispatch:
+env:
+  DB_NAME: metadata.sqlite3
+  METADATA_DIR: metadata
+jobs:
+  crawl:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Crawl
+        id: crawl
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ./scripts/crawl.sh ${{ env.DB_NAME }} ${{ env.METADATA_DIR }}
+      - name: Generate products
+        run: |
+          ./scripts/generate-products.sh
+      - name: Create PR
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          add-paths: |
+            ${{ env.DB_NAME }}
+            ${{ env.METADATA_DIR }}
+          branch: "metadata-update"
+          author: "LaunchDarklyReleaseBot <LaunchDarklyReleaseBot@launchdarkly.com>"
+          committer: "LaunchDarklyReleaseBot <LaunchDarklyReleaseBot@launchdarkly.com>"
+          title: "feat: update metadata"
+          commit-message: "Updates SDK metadata"
