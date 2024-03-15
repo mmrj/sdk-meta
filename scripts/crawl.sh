@@ -2,12 +2,13 @@
 
 set -e
 
-go build ./cmd/ingest
 
 if [ -z "$1" ]; then
   echo "Usage: $0 <sqlite-db-path> <metadata-dir-path>"
   exit 1
 fi
+
+go build ./cmd/ingest
 
 golden_db=$1
 temp_db="new_$1"
@@ -23,7 +24,7 @@ mkdir "$temp_dir"
 jq -r '.repos[]' < config.json | while read -r repo; do
   echo "Fetching metadata.json for $repo"
   sanitized_repo=$(echo "$repo" | tr '/' '_')
-  gh api "repos/$repo/contents/.launchdarkly/metadata.json" -q '.content' | base64 --decode > "$temp_dir/$sanitized_repo.json"
+  gh api "repos/$repo/contents/.sdk_metadata.json" -q '.content' | base64 --decode > "$temp_dir/$sanitized_repo.json"
   echo "Ingesting metadata.json for $repo"
   ./ingest -metadata "$temp_dir/$sanitized_repo.json" -db "$temp_db" -repo "$repo"
 done

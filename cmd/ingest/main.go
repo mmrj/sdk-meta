@@ -69,6 +69,7 @@ func run2() error {
 }
 
 type metadataV1 struct {
+	Name      string   `json:"name"`
 	Path      string   `json:"path"`
 	UserAgent string   `json:"user-agent"`
 	Type      string   `json:"type"`
@@ -78,6 +79,9 @@ type metadataV1 struct {
 		Deprecated *string `json:"deprecated"`
 		Removed    *string `json:"removed"`
 	} `json:"features"`
+	Releases struct {
+		TagPrefix string `json:"tag-prefix"`
+	} `json:"releases"`
 }
 type metadataCollection struct {
 	Version int `json:"version"`
@@ -220,7 +224,7 @@ func insertName(tx *sql.Tx, id string, metadata *metadataV1) error {
 		return err
 	}
 	defer stmt.Close()
-	_, err = stmt.Exec(id, metadata.Path)
+	_, err = stmt.Exec(id, metadata.Name)
 	return err
 }
 

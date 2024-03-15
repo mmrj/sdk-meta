@@ -11,7 +11,12 @@ CREATE TABLE sdk_repos (
 CREATE TABLE sdk_languages (
     id TEXT,
     language TEXT NOT NULL,
-    PRIMARY KEY (id, language)
+    PRIMARY KEY (id, language),
+    FOREIGN KEY (language) REFERENCES sdk_language_info(language)
+);
+
+CREATE TABLE sdk_language_info (
+    language TEXT PRIMARY KEY
 );
 
 CREATE TABLE sdk_types (
@@ -44,7 +49,30 @@ CREATE TABLE sdk_feature_info (
 
 INSERT INTO sdk_type_info (type, description) VALUES
                                               ('client-side', 'Primarily used for user-facing application.'),
-                                              ('server-side', 'Primarily used for server-side applications.');
+                                              ('server-side', 'Primarily used for server-side applications.'),
+                                              ('edge', 'Primarily used to delivery flag payloads to edge services.');
 
 INSERT INTO sdk_feature_info (feature, description) VALUES
     ('u2c', 'The concept of Users is replaced with Contexts, which can be used to represent users, devices, or other entities.');
+
+INSERT INTO sdk_language_info (language) VALUES
+    ('Apex'),
+    ('BrightScript'),
+    ('JavaScript'),
+    ('TypeScript'),
+    ('Python'),
+    ('Ruby'),
+    ('C++'),
+    ('C'),
+    ('C#'),
+    ('Java'),
+    ('Kotlin'),
+    ('Go'),
+    ('Swift'),
+    ('Rust'),
+    ('PHP'),
+    ('Haskell'),
+    ('Erlang'),
+    ('Lua'),
+    ('Dart'),
+    ('Objective-C');
