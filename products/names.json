@@ -1,20 +1,8 @@
 {
-  "react-native": [
-    "React Native SDK"
-  ],
-  "node-server": [
-    "Node.js SDK"
-  ],
-  "vercel": [
-    "Vercel Edge SDK"
-  ],
-  "akamai-base": [
-    "Akamai SDK"
-  ],
-  "akamai-edgekv": [
-    "Akamai SDK for EdgeKV"
-  ],
-  "cloudflare": [
-    "Cloudflare SDK"
-  ]
+  "react-native": "React Native SDK",
+  "node-server": "Node.js SDK",
+  "vercel": "Vercel Edge SDK",
+  "akamai-base": "Akamai SDK",
+  "akamai-edgekv": "Akamai SDK for EdgeKV",
+  "cloudflare": "Cloudflare SDK"
 }
