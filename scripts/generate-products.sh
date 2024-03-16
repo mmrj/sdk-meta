@@ -17,6 +17,3 @@ sqlite3 -json metadata.sqlite3 "SELECT * from sdk_types;" |
 
 sqlite3 -json metadata.sqlite3 "SELECT * from sdk_repos;" |
   jq -S 'reduce .[] as $item ({}; .[$item.id] += {github: $item.github})' > products/repos.json
-
-sqlite3 -json metadata.sqlite3 "SELECT * from sdk_features;" |
-  jq -S 'reduce .[] as $item ({}; .[$item.id] = {($item.feature): {introduced: $item.introduced, deprecated: $item.deprecated, removed: $item.removed}})' > products/features.json
