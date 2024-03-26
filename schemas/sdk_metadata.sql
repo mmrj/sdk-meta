@@ -32,7 +32,7 @@ CREATE TABLE sdk_type_info (
 );
 
 CREATE TABLE sdk_features (
-    id TEXT,
+    id TEXT NOT NULL,
     feature TEXT NOT NULL,
     introduced TEXT NOT NULL,
     deprecated TEXT,
@@ -44,6 +44,15 @@ CREATE TABLE sdk_features (
 CREATE TABLE sdk_feature_info (
     feature TEXT PRIMARY KEY,
     description TEXT NOT NULL
+);
+
+CREATE TABLE sdk_releases (
+    id TEXT NOT NULL,
+    major TEXT NOT NULL,
+    minor TEXT NOT NULL,
+    date TEXT NOT NULL,
+    eol TEXT,
+    PRIMARY KEY(id, major, minor)
 );
 
 
