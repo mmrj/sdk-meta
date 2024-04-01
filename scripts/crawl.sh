@@ -19,10 +19,13 @@ rm -rf "$temp_dir"
 sqlite3 "$temp_db" < ./schemas/sdk_metadata.sql
 mkdir "$temp_dir"
 
-jq -r '.repos[]' < config.json | while read -r repo; do
-  echo "Fetching metadata.json for $repo"
+./scripts/repos.sh | while read -r repo; do
+  echo "checking $repo"
   sanitized_repo=$(echo "$repo" | tr '/' '_')
-  gh api "repos/$repo/contents/.sdk_metadata.json" -q '.content' | base64 --decode > "$temp_dir/$sanitized_repo.json"
-  echo "Ingesting metadata.json for $repo"
+  metadata=$(gh api "repos/$repo/contents/.sdk_metadata.json" -q '.content') || {
+    continue
+  }
+  echo "$metadata" | base64 --decode > "$temp_dir/$sanitized_repo.json"
+  echo "found metadata in $repo"
   ./ingest -metadata "$temp_dir/$sanitized_repo.json" -db "$temp_db" -repo "$repo"
 done
