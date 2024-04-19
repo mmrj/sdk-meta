@@ -1,0 +1,97 @@
+{
+  "$id": "ld_log_codes",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Log Codes",
+  "description": "Defines LaunchDarkly SDK Log Codes",
+  "type": "object",
+  "minItems": 0,
+  "additionalProperties": {
+    "$ref": "#/$defs/system"
+  },
+  "$defs": {
+    "code": {
+      "type": "object",
+      "required": [
+        "specifier",
+        "description",
+        "message"
+      ],
+      "properties": {
+        "specifier": {
+          "type": "number"
+        },
+        "description": {
+          "type": "string"
+        },
+        "message": {
+          "$ref": "#/$defs/message"
+        }
+      },
+      "additionalProperties": false
+    },
+    "class": {
+      "type": "object",
+      "required": [
+        "specifier",
+        "description",
+        "codes"
+      ],
+      "properties": {
+        "specifier": {
+          "type": "number"
+        },
+        "description": {
+          "type": "string"
+        },
+        "codes": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/code"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "system": {
+      "type": "object",
+      "required": [
+        "specifier",
+        "description",
+        "classes"
+      ],
+      "properties": {
+        "specifier": {
+          "type": "number"
+        },
+        "description": {
+          "type": "string"
+        },
+        "classes": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/class"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "message": {
+      "type": "object",
+      "required": [
+        "parameterized"
+      ],
+      "properties": {
+        "parameterized": {
+          "type": "string"
+        },
+        "parameters": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "name": "error-code-testing",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "genSchema": "npx json2ts ../../schema/ld_log_codes.json ld_log_codes.d.ts",
+    "generate": "npm run genSchema && npx ts-node generate.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.12.7",
+    "typescript": "^5.4.5",
+    "json-schema-to-ts": "^3.0.1",
+    "ts-node": "^10.9.2"
+  }
+}

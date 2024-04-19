@@ -1,0 +1,37 @@
+{
+  "configuration": {
+    "specifier": 0,
+    "description": "Conditions associated with SDK configuration.",
+    "classes": {
+      "usageError": {
+        "specifier": 3,
+        "description": "An error which represents a mis-use of an API and impedes correct functionality.",
+        "codes": {
+          "wrongType": {
+            "specifier": 1,
+            "description": "This message indicates that a configuration option was not of the correct type. This primarily applies to languages that are not strongly typed.",
+            "message": {
+              "parameterized": "Config option \"${name}\" should be of type ${expectedType}, but received ${actualType}, using the default value (${defaultValue}).",
+              "parameters": {
+                "name": "The name of the configuration option.",
+                "expectedType": "The correct type for the configuration option.",
+                "actualType": "The incorrect types used for the configuration option.",
+                "defaultValue": "The default value of the configuration option."
+              }
+            }
+          },
+          "unknownOption": {
+            "specifier": 2,
+            "description": "This message indicates that an unrecognized configuration option was provided. This primarily applied to languages that are not strongly typed.",
+            "message": {
+              "parameterized": "Ignoring unknown config option \"${name}\"",
+              "parameters": {
+                "name": "The option that was not recognized."
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
