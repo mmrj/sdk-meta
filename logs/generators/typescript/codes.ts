@@ -15,7 +15,7 @@ export class LogMessages {
       /**
        * This message indicates that a configuration option was not of the correct type. This primarily applies to languages that are not strongly typed.
       */
-      static WrongType  = class {
+      static WrongType = class {
         static readonly code = "0:3:1";
         /**
          * Generate a log string for this code.
@@ -33,7 +33,7 @@ export class LogMessages {
       /**
        * This message indicates that an unrecognized configuration option was provided. This primarily applied to languages that are not strongly typed.
       */
-      static UnknownOption  = class {
+      static UnknownOption = class {
         static readonly code = "0:3:2";
         /**
          * Generate a log string for this code.

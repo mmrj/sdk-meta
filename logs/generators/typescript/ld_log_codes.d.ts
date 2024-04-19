@@ -9,28 +9,37 @@
  * Defines LaunchDarkly SDK Log Codes
  */
 export interface LogCodes {
-  [k: string]: System;
+  systems: {
+    [k: string]: System;
+  };
+  classes: {
+    [k: string]: Class;
+  };
+  conditions: {
+    [k: string]: Condition;
+  };
+  [k: string]: unknown;
 }
 export interface System {
   specifier: number;
   description: string;
-  classes: {
-    [k: string]: Class;
-  };
 }
 export interface Class {
   specifier: number;
   description: string;
-  codes: {
-    [k: string]: Code;
-  };
   additionalProperties?: never;
   [k: string]: unknown;
 }
-export interface Code {
+export interface Condition {
   specifier: number;
+  class: number;
+  system: number;
   description: string;
   message: Message;
+  deprecated?: boolean;
+  deprecatedReason?: string;
+  superseded?: string;
+  supersededReason?: string;
 }
 export interface Message {
   parameterized: string;

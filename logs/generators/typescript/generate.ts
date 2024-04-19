@@ -3,7 +3,7 @@ import {
   LogCodes,
   System,
   Class,
-  Code,
+  Condition,
   Message
 } from './ld_log_codes';
 
@@ -51,13 +51,13 @@ async function main() {
     await writeCommentLn(`@param ${name} ${def}`);
   }
 
-  async function writeCodeDocComment(definition: Code) {
+  async function writeConditionDocComment(definition: Condition) {
     await withDocComment(async () => {
       await writeCommentLn(definition.description);
     });
   }
 
-  async function writeMessageFunctionDocComment(definition: Code) {
+  async function writeMessageFunctionDocComment(definition: Condition) {
     await withDocComment(async () => {
       await writeCommentLn("Generate a log string for this code.");
       await writeCommentLn("");
@@ -73,23 +73,25 @@ async function main() {
   await writeLn("// This code is automatically generated and should not be manually edited.");
   await writeLn("");
 
-  for (let systemName of Object.keys(definitions)) {
+  for (let systemName of Object.keys(definitions.systems || {})) {
     await withDocComment(async () => {
       await writeCommentLn("Standardized log codes and messages.");
     });
     await scoped('export class LogMessages {', '}', async () => {
-      await writeSystem(systemName, definitions[systemName]);
+      await writeSystem(systemName, definitions.systems![systemName]);
     });
   }
 
-  async function writeClass(className: string, system: System, cls: Class) {
+  async function writeClass(className: string, cls: Class, systemName: string, system: System) {
     await withDocComment(async () => {
       await writeCommentLn(cls.description);
     });
     await scoped(`static ${capitalize(className)} = class {`, '}', async () => {
-      for (let codeName of Object.keys(cls.codes)) {
-        const definition: Code = cls.codes[codeName];
-        await writeCode(codeName, system, cls, definition);
+      const applicable = Object.entries(definitions.conditions).filter(([_key, value]) => {
+        return value.class == cls.specifier && value.system == system.specifier;
+      });
+      for (let [conditionName, condition] of applicable) {
+        await writeCondition(conditionName, systemName, className, condition);
       }
     });
   }
@@ -99,21 +101,20 @@ async function main() {
       await writeCommentLn(system.description);
     });
     await scoped(`static ${capitalize(systemName)}  = class {`, '}', async () => {
-      for (let className of Object.keys(system.classes)) {
-        const cls: Class = system.classes[className];
-        await writeClass(className, system, cls);
+      for(let [className, cls] of Object.entries(definitions.classes)) {
+        await writeClass(className, cls, systemName, system);
       }
     });
   }
 
-  async function writeCode(codeName: string, system: System, cls: Class, Code: Code) {
-    await writeCodeDocComment(Code);
-    await scoped(`static ${capitalize(codeName)}  = class {`, '}', async () => {
-      const code = `${system.specifier}:${cls.specifier}:${Code.specifier}`;
+  async function writeCondition(conditionName: string, system: string, cls: string, condition: Condition) {
+    await writeConditionDocComment(condition);
+    await scoped(`static ${capitalize(conditionName)} = class {`, '}', async () => {
+      const code = `${condition.system}:${condition.class}:${condition.specifier}`;
       await writeLn(`static readonly code = \"${code}\";`);
-      await writeMessageFunctionDocComment(Code);
-      await scoped(`static message(${makeParams(Code.message)}): string {`, '}', async () => {
-        await writeLn(`return \`${code} ${Code.message.parameterized}\`;`);
+      await writeMessageFunctionDocComment(condition);
+      await scoped(`static message(${makeParams(condition.message)}): string {`, '}', async () => {
+        await writeLn(`return \`${code} ${condition.message.parameterized}\`;`);
       });
     });
   }

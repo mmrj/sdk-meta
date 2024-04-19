@@ -5,14 +5,34 @@
   "description": "Defines LaunchDarkly SDK Log Codes",
   "type": "object",
   "minItems": 0,
-  "additionalProperties": {
-    "$ref": "#/$defs/system"
+  "properties": {
+    "systems": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/$defs/system"
+      }
+    },
+    "classes": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/$defs/class"
+      }
+    },
+    "conditions": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/$defs/condition"
+      }
+    }
   },
+  "required": ["systems", "classes", "conditions"],
   "$defs": {
-    "code": {
+    "condition": {
       "type": "object",
       "required": [
         "specifier",
+        "class",
+        "system",
         "description",
         "message"
       ],
@@ -20,12 +40,39 @@
         "specifier": {
           "type": "number"
         },
+        "class": {
+          "type": "number"
+        },
+        "system": {
+          "type": "number"
+        },
         "description": {
           "type": "string"
         },
         "message": {
           "$ref": "#/$defs/message"
+        },
+        "deprecated": {
+          "type": "boolean"
+        },
+        "deprecatedReason": {
+          "type": "string"
+        },
+        "superseded": {
+          "type": "string",
+          "pattern": "^[0-9]+:[0-9]+:[0-9]+$"
+        },
+        "supersededReason": {
+          "type": "string"
         }
+      },
+      "dependentRequired": {
+        "deprecated": [
+          "deprecatedReason"
+        ],
+        "superseded": [
+          "supersededReason"
+        ]
       },
       "additionalProperties": false
     },
@@ -33,8 +80,7 @@
       "type": "object",
       "required": [
         "specifier",
-        "description",
-        "codes"
+        "description"
       ],
       "properties": {
         "specifier": {
@@ -42,12 +88,6 @@
         },
         "description": {
           "type": "string"
-        },
-        "codes": {
-          "type": "object",
-          "additionalProperties": {
-            "$ref": "#/$defs/code"
-          }
         },
         "additionalProperties": false
       }
@@ -56,8 +96,7 @@
       "type": "object",
       "required": [
         "specifier",
-        "description",
-        "classes"
+        "description"
       ],
       "properties": {
         "specifier": {
@@ -65,12 +104,6 @@
         },
         "description": {
           "type": "string"
-        },
-        "classes": {
-          "type": "object",
-          "additionalProperties": {
-            "$ref": "#/$defs/class"
-          }
         }
       },
       "additionalProperties": false
