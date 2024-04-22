@@ -1,43 +1,47 @@
 {
-  "systems": {
-    "configuration": {
-      "specifier": 0,
-      "description": "Conditions associated with SDK configuration."
-    }
-  },
   "classes": {
     "usageError": {
-      "specifier": 3,
-      "description": "An error which represents a mis-use of an API and impedes correct functionality."
+      "description": "An error which represents a mis-use of an API and impedes correct functionality.",
+      "specifier": 3
     }
   },
   "conditions": {
-    "wrongType": {
-      "specifier": 1,
-      "class": 3,
-      "system": 0,
-      "description": "This message indicates that a configuration option was not of the correct type. This primarily applies to languages that are not strongly typed.",
-      "message": {
-        "parameterized": "Config option \"${name}\" should be of type ${expectedType}, but received ${actualType}, using the default value (${defaultValue}).",
-        "parameters": {
-          "name": "The name of the configuration option.",
-          "expectedType": "The correct type for the configuration option.",
-          "actualType": "The incorrect types used for the configuration option.",
-          "defaultValue": "The default value of the configuration option."
-        }
-      }
-    },
     "unknownOption": {
-      "specifier": 2,
       "class": 3,
-      "system": 0,
       "description": "This message indicates that an unrecognized configuration option was provided. This primarily applied to languages that are not strongly typed.",
       "message": {
         "parameterized": "Ignoring unknown config option \"${name}\"",
         "parameters": {
           "name": "The option that was not recognized."
         }
-      }
+      },
+      "specifier": 2,
+      "system": 0
+    },
+    "wrongType": {
+      "class": 3,
+      "description": "This message indicates that a configuration option was not of the correct type. This primarily applies to languages that are not strongly typed.",
+      "message": {
+        "parameterized": "Config option \"${name}\" should be of type ${expectedType}, but received ${actualType}, using the default value (${defaultValue}).",
+        "parameters": {
+          "actualType": "The incorrect types used for the configuration option.",
+          "defaultValue": "The default value of the configuration option.",
+          "expectedType": "The correct type for the configuration option.",
+          "name": "The name of the configuration option."
+        }
+      },
+      "specifier": 1,
+      "system": 0
+    }
+  },
+  "systems": {
+    "configuration": {
+      "description": "Conditions associated with SDK configuration.",
+      "specifier": 0
+    },
+    "streaming": {
+      "description": "Responsible for handling the streaming connection to LaunchDarkly.",
+      "specifier": 1
     }
   }
 }

@@ -27,8 +27,6 @@ export interface System {
 export interface Class {
   specifier: number;
   description: string;
-  additionalProperties?: never;
-  [k: string]: unknown;
 }
 export interface Condition {
   specifier: number;

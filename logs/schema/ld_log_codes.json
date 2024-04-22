@@ -88,9 +88,9 @@
         },
         "description": {
           "type": "string"
-        },
-        "additionalProperties": false
-      }
+        }
+      },
+      "additionalProperties": false
     },
     "system": {
       "type": "object",
