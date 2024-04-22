@@ -1,0 +1,14 @@
+{
+  "bootstrap-sha": "5b2935ba2ce7fc61508ed3043e5516aebb5c579",
+  "include-component-in-tag": true,
+  "separate-pull-requests": true,
+  "packages": {
+    "products/json": {
+      "release-type": "simple",
+      "bump-minor-pre-major": true,
+      "include-v-in-tag": false,
+      "release-as": "0.1.0",
+      "prerelease": true
+    }
+  }
+}
