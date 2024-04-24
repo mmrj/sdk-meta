@@ -39,6 +39,10 @@
       "description": "Conditions associated with SDK configuration.",
       "specifier": 0
     },
+    "polling": {
+      "description": "This is responsible for polling.",
+      "specifier": 2
+    },
     "streaming": {
       "description": "Responsible for handling the streaming connection to LaunchDarkly.",
       "specifier": 1

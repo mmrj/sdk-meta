@@ -64,3 +64,11 @@ func UpdateCodes(fn func(codes *LdLogCodesJson) error) error {
 	err = writeLogCodes(defaultCodesPath, &codes)
 	return err
 }
+
+func WithCodes(fn func(codes *LdLogCodesJson) error) error {
+	codes, err := loadCodes(defaultCodesPath)
+	if err != nil {
+		return err
+	}
+	return fn(&codes)
+}

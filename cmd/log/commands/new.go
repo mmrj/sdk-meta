@@ -86,6 +86,9 @@ func runNewConditionCommand() {
 		}
 
 		err = logs.AddCode(codes, params.Class, params.System, params.Name, params.Description, message)
+		if err == nil {
+			fmt.Printf("The \"%s\" condition has been added.", params.Name)
+		}
 		return err
 	})
 	if err != nil {

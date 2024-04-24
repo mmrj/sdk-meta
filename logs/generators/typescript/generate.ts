@@ -26,7 +26,7 @@ async function main() {
   }
 
   async function writeLn(text: string) {
-    write(`${text}\n`);
+    await write(`${text}\n`);
   }
 
   async function scoped(start: string, end: string, scope: () => Promise<void>): Promise<void> {

@@ -19,6 +19,7 @@ func usage() {
 			new: Create a new system, class, or condition.
 			deprecate: Deprecate a log code.
 			supersede: Indicate a log code has been superseded.
+			document: Generate markdown documentation for log codes.
 		`)
 }
 
@@ -35,6 +36,8 @@ func main() {
 		// TODO
 	case "supersede":
 		// TODO
+	case "document":
+		commands.RunDocumentCommand()
 	default:
 		fmt.Printf("Unrecognized command: %s\n", os.Args[1])
 		usage()

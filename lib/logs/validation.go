@@ -30,5 +30,6 @@ func ValidateConditionName(name string, codes *LdLogCodesJson) error {
 }
 
 func ValidateParameterizedMessageString(message string) error {
-	return nil
+	_, err := ParseMessage(message)
+	return err
 }
