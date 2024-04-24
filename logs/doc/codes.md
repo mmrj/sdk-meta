@@ -33,12 +33,15 @@ This message indicates that a configuration option was not of the correct type. 
 
 | parameter | description |
 |-----------|-------------|
+| name | The name of the configuration option. |
 | actualType | The incorrect types used for the configuration option. |
 | defaultValue | The default value of the configuration option. |
 | expectedType | The correct type for the configuration option. |
-| name | The name of the configuration option. |
 
 
+### Troubleshooting
+
+This is a step that you need to troubleshoot!
 
 # polling
 

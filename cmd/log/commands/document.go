@@ -5,12 +5,11 @@ import (
 	"os"
 
 	"github.com/launchdarkly/sdk-meta/lib/logs"
-	"github.com/launchdarkly/sdk-meta/lib/markdown"
 )
 
 func RunDocumentCommand() {
 	err := logs.WithCodes(func(codes *logs.LdLogCodesJson) error {
-		return markdown.GenerateMarkdown(codes, "logs/doc/codes.md")
+		return logs.GenerateMarkdown(codes, "logs/doc/codes.md")
 	})
 
 	if err != nil {
