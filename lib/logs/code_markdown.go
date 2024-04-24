@@ -40,7 +40,7 @@ func (cw *codeMarkdownWriter) writeCondition(name string, condition Condition) {
 		cw.writer.WriteLn(condition.Description)
 		cw.writer.WriteBlankLn()
 
-		code := fmt.Sprintf("%d:%d:%d", int(condition.System), int(condition.Class), int(condition.Specifier))
+		code := GetCode(condition)
 		cw.writer.WriteTableHeader("code", "system", "class")
 		cw.writer.WriteTableRow(code, sysName, className)
 

@@ -1,11 +1,14 @@
 package logs
 
-import "regexp"
+import (
+	"fmt"
+	"regexp"
+)
 
-const specifierFormat = "^[a-zA-Z]+$"
+const specifierName = "^[a-zA-Z]+$"
 
 func ValidSpecifierName(s string) bool {
-	matched, err := regexp.MatchString(specifierFormat, s)
+	matched, err := regexp.MatchString(specifierName, s)
 	if err != nil {
 		return false
 	}
@@ -19,3 +22,7 @@ var (
 	SpecifierTypeSystem    SpecifierType = "system"
 	SpecifierTypeCondition SpecifierType = "condition"
 )
+
+func GetCode(condition Condition) string {
+	return fmt.Sprintf("%d:%d:%d", int(condition.System), int(condition.Class), int(condition.Specifier))
+}

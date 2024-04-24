@@ -5,8 +5,7 @@ import (
 	"github.com/launchdarkly/sdk-meta/lib/logs"
 )
 
-func NewSpecifierForm() (*huh.Form, *logs.SpecifierType) {
-	var specifierType logs.SpecifierType
+func NewSpecifierForm(specifierType *logs.SpecifierType) *huh.Form {
 	// Starting group decides which type of specifier to create.
 	return huh.NewForm(huh.NewGroup(
 		huh.NewSelect[string]().
@@ -15,6 +14,6 @@ func NewSpecifierForm() (*huh.Form, *logs.SpecifierType) {
 				huh.NewOption("system", string(logs.SpecifierTypeSystem)),
 				huh.NewOption("class", string(logs.SpecifierTypeClass)),
 				huh.NewOption("condition", string(logs.SpecifierTypeCondition)),
-			).Value((*string)(&specifierType)),
-	)), &specifierType
+			).Value((*string)(specifierType)),
+	))
 }

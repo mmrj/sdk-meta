@@ -1,7 +1,12 @@
 package logs
 
 import (
+	"errors"
 	"fmt"
+	"strconv"
+	"strings"
+
+	"github.com/launchdarkly/sdk-meta/lib/collections"
 )
 
 func AddSystem(codes *LdLogCodesJson, name string, description string) error {
@@ -77,5 +82,58 @@ func AddCode(codes *LdLogCodesJson, className string, systemName string, conditi
 		Message:     message,
 	}
 
+	return nil
+}
+
+func DeprecateCode(codes *LdLogCodesJson, code string, reason string) error {
+	specifierStrings := strings.Split(code, ":")
+	systemSpec, err := strconv.ParseFloat(specifierStrings[0], 64)
+	if err != nil {
+		return err
+	}
+	classSpec, err := strconv.ParseFloat(specifierStrings[1], 64)
+	if err != nil {
+		return err
+	}
+	conditionSpec, err := strconv.ParseFloat(specifierStrings[2], 64)
+	if err != nil {
+		return err
+	}
+	conditionName, condition, present := collections.MapFind(codes.Conditions, func(s string, condition Condition) bool {
+		return condition.System == systemSpec && condition.Class == classSpec && condition.Specifier == conditionSpec
+	})
+	if !present {
+		return errors.New("cannot deprecate a condition which does not exist")
+	}
+	deprecated := true
+	condition.Deprecated = &deprecated
+	condition.DeprecatedReason = &reason
+	codes.Conditions[conditionName] = condition
+	return nil
+}
+
+func SupersedeCode(codes *LdLogCodesJson, code string, replacementCode string, reason string) error {
+	specifierStrings := strings.Split(code, ":")
+	systemSpec, err := strconv.ParseFloat(specifierStrings[0], 64)
+	if err != nil {
+		return err
+	}
+	classSpec, err := strconv.ParseFloat(specifierStrings[1], 64)
+	if err != nil {
+		return err
+	}
+	conditionSpec, err := strconv.ParseFloat(specifierStrings[2], 64)
+	if err != nil {
+		return err
+	}
+	conditionName, condition, present := collections.MapFind(codes.Conditions, func(s string, condition Condition) bool {
+		return condition.System == systemSpec && condition.Class == classSpec && condition.Specifier == conditionSpec
+	})
+	if !present {
+		return errors.New("cannot deprecate a condition which does not exist")
+	}
+	condition.Superseded = &replacementCode
+	condition.SupersededReason = &reason
+	codes.Conditions[conditionName] = condition
 	return nil
 }

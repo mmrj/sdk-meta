@@ -9,13 +9,14 @@ import (
 )
 
 func RunNewCommand() {
-	form, specifierType := forms.NewSpecifierForm()
+	var specifierType logs.SpecifierType
+	form := forms.NewSpecifierForm(&specifierType)
 	err := form.Run()
 	if err != nil {
 		_, _ = fmt.Fprintln(os.Stderr, "error specifier form", err.Error())
 		return
 	}
-	switch *specifierType {
+	switch specifierType {
 	case logs.SpecifierTypeSystem:
 		runNewSystemCommand()
 	case logs.SpecifierTypeClass:

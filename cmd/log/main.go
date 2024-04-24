@@ -12,9 +12,6 @@ func usage() {
 		USAGE:
 			log <command>
 
-		GET HELP FOR A COMMAND:
-			log <command> --help
-
 		COMMANDS:
 			new: Create a new system, class, or condition.
 			deprecate: Deprecate a log code.
@@ -33,9 +30,9 @@ func main() {
 	case "new":
 		commands.RunNewCommand()
 	case "deprecate":
-		// TODO
+		commands.RunDeprecateCommand()
 	case "supersede":
-		// TODO
+		commands.RunSupersedeCommand()
 	case "document":
 		commands.RunDocumentCommand()
 	default:

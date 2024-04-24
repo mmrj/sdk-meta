@@ -2,7 +2,10 @@ package logs
 
 import (
 	"fmt"
+	"regexp"
 )
+
+const codeFormat = "^[0-9]+:[0-9]+:[0-9]+$"
 
 func validateName(name string, specifierType SpecifierType, present bool) error {
 	if present {
@@ -32,4 +35,12 @@ func ValidateConditionName(name string, codes *LdLogCodesJson) error {
 func ValidateParameterizedMessageString(message string) error {
 	_, err := ParseMessage(message)
 	return err
+}
+
+func ValidateCode(code string) bool {
+	matched, err := regexp.MatchString(codeFormat, code)
+	if err != nil {
+		return false
+	}
+	return matched
 }
