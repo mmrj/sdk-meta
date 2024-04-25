@@ -1,10 +1,13 @@
 package logs
 
 import (
+	"errors"
 	"fmt"
+	"os"
 	"regexp"
 
 	"github.com/launchdarkly/sdk-meta/lib/collections"
+	"github.com/xeipuuv/gojsonschema"
 )
 
 const codeFormat = "^[0-9]+:[0-9]+:[0-9]+$"
@@ -50,4 +53,32 @@ func ValidateCode(code string) bool {
 		return false
 	}
 	return matched
+}
+
+func canonicalPath(path string) string {
+	dir, err := os.Getwd()
+	if err != nil {
+		_, _ = fmt.Fprintln(os.Stderr, fmt.Errorf("could not access working directory: %w", err))
+		os.Exit(1)
+	}
+	return fmt.Sprintf("file://%s/%s", dir, path)
+}
+
+func ValidateCodes() error {
+	schemaLoader := gojsonschema.NewReferenceLoader(canonicalPath(defaultCodesSchemaPath))
+	documentLoader := gojsonschema.NewReferenceLoader(canonicalPath(defaultCodesPath))
+
+	result, err := gojsonschema.Validate(schemaLoader, documentLoader)
+	if err != nil {
+		return err
+	}
+	if result.Valid() {
+		return nil
+	} else {
+		_, _ = fmt.Fprintln(os.Stderr, "The document is not valid. see errors :")
+		for _, desc := range result.Errors() {
+			_, _ = fmt.Fprintf(os.Stderr, "- %s\n", desc)
+		}
+		return errors.New("error processing codes json file")
+	}
 }

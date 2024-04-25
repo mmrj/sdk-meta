@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/launchdarkly/sdk-meta/cmd/log/commands"
+	"github.com/launchdarkly/sdk-meta/lib/logs"
 )
 
 func usage() {
@@ -17,7 +18,16 @@ func usage() {
 			deprecate: Deprecate a log code.
 			supersede: Indicate a log code has been superseded.
 			document: Generate markdown documentation for log codes.
+			validate: Validate codes against the schema.
 		`)
+}
+
+func validateCodes() {
+	err := logs.ValidateCodes()
+	if err != nil {
+		_, _ = fmt.Fprintln(os.Stderr, err.Error())
+		os.Exit(1)
+	}
 }
 
 func main() {
@@ -28,13 +38,20 @@ func main() {
 
 	switch os.Args[1] {
 	case "new":
+		validateCodes()
 		commands.RunNewCommand()
 	case "deprecate":
+		validateCodes()
 		commands.RunDeprecateCommand()
 	case "supersede":
+		validateCodes()
 		commands.RunSupersedeCommand()
 	case "document":
+		validateCodes()
 		commands.RunDocumentCommand()
+	case "validate":
+		validateCodes()
+		fmt.Println("Codes matched schema.")
 	default:
 		fmt.Printf("Unrecognized command: %s\n", os.Args[1])
 		usage()

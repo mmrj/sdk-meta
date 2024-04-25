@@ -8,6 +8,7 @@ import (
 )
 
 const defaultCodesPath = "logs/data/codes.json"
+const defaultCodesSchemaPath = "logs/schema/ld_log_codes.json"
 
 func loadCodes(path string) (codes LdLogCodesJson, err error) {
 	f, err := os.Open("logs/data/codes.json")
