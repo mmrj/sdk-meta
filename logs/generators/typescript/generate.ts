@@ -90,8 +90,8 @@ async function main() {
       const applicable = Object.entries(definitions.conditions).filter(([_key, value]) => {
         return value.class == cls.specifier && value.system == system.specifier;
       });
-      for (let [conditionName, condition] of applicable) {
-        await writeCondition(conditionName, systemName, className, condition);
+      for (let [conditionCode, condition] of applicable) {
+        await writeCondition(conditionCode, systemName, className, condition);
       }
     });
   }
@@ -107,14 +107,13 @@ async function main() {
     });
   }
 
-  async function writeCondition(conditionName: string, system: string, cls: string, condition: Condition) {
+  async function writeCondition(conditionCode: string, system: string, cls: string, condition: Condition) {
     await writeConditionDocComment(condition);
-    await scoped(`static ${capitalize(conditionName)} = class {`, '}', async () => {
-      const code = `${condition.system}:${condition.class}:${condition.specifier}`;
-      await writeLn(`static readonly code = \"${code}\";`);
+    await scoped(`static ${capitalize(condition.name)} = class {`, '}', async () => {
+      await writeLn(`static readonly code = \"${conditionCode}\";`);
       await writeMessageFunctionDocComment(condition);
       await scoped(`static message(${makeParams(condition.message)}): string {`, '}', async () => {
-        await writeLn(`return \`${code} ${condition.message.parameterized}\`;`);
+        await writeLn(`return \`${conditionCode} ${condition.message.parameterized}\`;`);
       });
     });
   }

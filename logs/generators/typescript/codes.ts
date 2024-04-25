@@ -21,12 +21,12 @@ export class LogMessages {
          * Generate a log string for this code.
          * 
          * This function will automatically include the log code.
-         * @param name The name of the configuration option.
-         * @param expectedType The correct type for the configuration option.
          * @param actualType The incorrect types used for the configuration option.
          * @param defaultValue The default value of the configuration option.
+         * @param expectedType The correct type for the configuration option.
+         * @param name The name of the configuration option.
         */
-        static message(name: string, expectedType: string, actualType: string, defaultValue: string): string {
+        static message(actualType: string, defaultValue: string, expectedType: string, name: string): string {
           return `0:3:1 Config option "${name}" should be of type ${expectedType}, but received ${actualType}, using the default value (${defaultValue}).`;
         }
       }

@@ -28,7 +28,12 @@ export interface Class {
   specifier: number;
   description: string;
 }
+/**
+ * This interface was referenced by `undefined`'s JSON-Schema definition
+ * via the `patternProperty` "^[0-9]+:[0-9]+:[0-9]+$".
+ */
 export interface Condition {
+  name: string;
   specifier: number;
   class: number;
   system: number;
