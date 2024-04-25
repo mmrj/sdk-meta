@@ -89,3 +89,7 @@ func (w *Writer) Save(outPath string) error {
 	_, err = file.WriteString(w.builder.String())
 	return err
 }
+
+func (w *Writer) String() string {
+	return w.builder.String()
+}

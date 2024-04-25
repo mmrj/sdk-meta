@@ -3,6 +3,8 @@ package logs
 import (
 	"errors"
 	"fmt"
+
+	"github.com/launchdarkly/sdk-meta/lib/collections"
 )
 
 func AddSystem(codes *LdLogCodesJson, name string, description string) error {
@@ -45,21 +47,25 @@ func AddClass(codes *LdLogCodesJson, name string, description string) error {
 	return nil
 }
 
-func AddCondition(codes *LdLogCodesJson, className string, systemName string, condName string, description string, message Message) error {
+func AddCondition(codes *LdLogCodesJson, className string, systemName string, condName string, description string, message Message) (Condition, error) {
 	system, systemPresent := codes.Systems[systemName]
 
 	if !systemPresent {
-		return fmt.Errorf("the system class does not exist. Please choose an existing system or create a new system")
+		return Condition{}, fmt.Errorf("the system class does not exist. Please choose an existing system or create a new system")
 	}
 
 	class, classPresent := codes.Classes[className]
 
 	if !classPresent {
-		return fmt.Errorf("the specified class does not exist. Please choose an existing class or create a new class")
+		return Condition{}, fmt.Errorf("the specified class does not exist. Please choose an existing class or create a new class")
 	}
 
+	conditions := collections.MapFilter(codes.Conditions, func(condition Condition) bool {
+		return condition.System == system.Specifier && condition.Class == class.Specifier
+	})
+
 	maxSpecifier := -1.0
-	for _, condition := range codes.Conditions {
+	for _, condition := range conditions {
 		if condition.Specifier > maxSpecifier {
 			maxSpecifier = condition.Specifier
 		}
@@ -79,12 +85,12 @@ func AddCondition(codes *LdLogCodesJson, className string, systemName string, co
 
 	_, present := codes.Conditions[code]
 	if present {
-		return fmt.Errorf("condition code already exists. Please choose a new code or the existing condition")
+		return Condition{}, fmt.Errorf("condition code already exists. Please choose a new code or the existing condition")
 	}
 
 	codes.Conditions[code] = condition
 
-	return nil
+	return condition, nil
 }
 
 func DeprecateCode(codes *LdLogCodesJson, code string, reason string) error {

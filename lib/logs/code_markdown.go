@@ -1,6 +1,7 @@
 package logs
 
 import (
+	"errors"
 	"fmt"
 	"os"
 
@@ -28,6 +29,20 @@ func GenerateMarkdown(codes *LdLogCodesJson, outPath string) error {
 	})
 
 	return cw.writer.Save(outPath)
+}
+
+func GenMarkdownCondition(codes *LdLogCodesJson, code string) (string, error) {
+	cw := codeMarkdownWriter{
+		writer: markdown.NewWriter(1),
+		codes:  codes,
+	}
+
+	condition, present := cw.codes.Conditions[code]
+	if !present {
+		return "", errors.New("code does not exist")
+	}
+	cw.writeCondition(code, condition)
+	return cw.writer.String(), nil
 }
 
 func (cw *codeMarkdownWriter) writeIntroduction() {
@@ -65,7 +80,7 @@ func (cw *codeMarkdownWriter) writeCondition(code string, condition Condition) {
 			cw.writer.WriteLn(fmt.Sprintf("`%s`", condition.Message.Parameterized))
 			cw.writer.WriteBlankLn()
 
-			if len(condition.Message.Parameterized) != 0 {
+			if len(condition.Message.Parameters) != 0 {
 				cw.writer.WriteTableHeader("parameter", "description")
 				for paramName, paramDesc := range condition.Message.Parameters {
 					cw.writer.WriteTableRow(paramName, paramDesc)

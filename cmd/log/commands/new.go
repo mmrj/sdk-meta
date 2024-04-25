@@ -7,6 +7,7 @@ import (
 	"github.com/launchdarkly/sdk-meta/cmd/log/forms"
 	"github.com/launchdarkly/sdk-meta/lib/logs"
 )
+import "github.com/charmbracelet/glamour"
 
 func RunNewCommand() {
 	var specifierType logs.SpecifierType
@@ -96,9 +97,16 @@ func runNewConditionCommand() {
 			}
 		}
 
-		err = logs.AddCondition(codes, params.Class, params.System, params.Name, params.Description, message)
+		condition, err := logs.AddCondition(codes, params.Class, params.System, params.Name, params.Description, message)
 		if err == nil {
-			fmt.Printf("The \"%s\" condition has been added.", params.Name)
+			fmt.Printf("The \"%s\" condition has been added.\n", params.Name)
+			markdownCondition, err := logs.GenMarkdownCondition(codes, logs.GetCode(condition))
+			if err != nil {
+				_, _ = fmt.Fprintln(os.Stderr, "Could not generate markdown preview.")
+			}
+
+			out, err := glamour.Render(markdownCondition, "dark")
+			fmt.Print(out)
 		}
 		return err
 	})
