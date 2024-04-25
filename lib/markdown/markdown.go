@@ -11,9 +11,10 @@ type Writer struct {
 	builder *strings.Builder
 }
 
-func NewWriter() *Writer {
+func NewWriter(depth int) *Writer {
 	return &Writer{
 		builder: &strings.Builder{},
+		depth:   depth,
 	}
 }
 

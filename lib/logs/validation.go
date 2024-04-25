@@ -3,6 +3,8 @@ package logs
 import (
 	"fmt"
 	"regexp"
+
+	"github.com/launchdarkly/sdk-meta/lib/collections"
 )
 
 const codeFormat = "^[0-9]+:[0-9]+:[0-9]+$"
@@ -27,8 +29,13 @@ func ValidateClassName(name string, codes *LdLogCodesJson) error {
 	return validateName(name, SpecifierTypeSystem, present)
 }
 
-func ValidateConditionName(name string, codes *LdLogCodesJson) error {
-	_, present := codes.Conditions[name]
+func ValidateConditionName(name string, system float64, class float64, codes *LdLogCodesJson) error {
+	conditions := collections.MapFilter(codes.Conditions, func(condition Condition) bool {
+		return condition.System == system && condition.Class == class
+	})
+	_, _, present := collections.MapFind(conditions, func(s string, condition Condition) bool {
+		return condition.Name == name
+	})
 	return validateName(name, SpecifierTypeCondition, present)
 }
 

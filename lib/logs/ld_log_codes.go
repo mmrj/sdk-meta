@@ -20,6 +20,9 @@ func (j *Condition) UnmarshalJSON(b []byte) error {
 	if v, ok := raw["message"]; !ok || v == nil {
 		return fmt.Errorf("field message in Condition: required")
 	}
+	if v, ok := raw["name"]; !ok || v == nil {
+		return fmt.Errorf("field name in Condition: required")
+	}
 	if v, ok := raw["specifier"]; !ok || v == nil {
 		return fmt.Errorf("field specifier in Condition: required")
 	}
@@ -142,6 +145,9 @@ type Condition struct {
 
 	// Message corresponds to the JSON schema field "message".
 	Message Message `json:"message" yaml:"message" mapstructure:"message"`
+
+	// Name corresponds to the JSON schema field "name".
+	Name string `json:"name" yaml:"name" mapstructure:"name"`
 
 	// Specifier corresponds to the JSON schema field "specifier".
 	Specifier float64 `json:"specifier" yaml:"specifier" mapstructure:"specifier"`

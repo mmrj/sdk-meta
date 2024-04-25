@@ -3,10 +3,6 @@ package logs
 import (
 	"errors"
 	"fmt"
-	"strconv"
-	"strings"
-
-	"github.com/launchdarkly/sdk-meta/lib/collections"
 )
 
 func AddSystem(codes *LdLogCodesJson, name string, description string) error {
@@ -49,7 +45,7 @@ func AddClass(codes *LdLogCodesJson, name string, description string) error {
 	return nil
 }
 
-func AddCode(codes *LdLogCodesJson, className string, systemName string, conditionName string, description string, message Message) error {
+func AddCondition(codes *LdLogCodesJson, className string, systemName string, condName string, description string, message Message) error {
 	system, systemPresent := codes.Systems[systemName]
 
 	if !systemPresent {
@@ -62,11 +58,6 @@ func AddCode(codes *LdLogCodesJson, className string, systemName string, conditi
 		return fmt.Errorf("the specified class does not exist. Please choose an existing class or create a new class")
 	}
 
-	_, present := codes.Conditions[conditionName]
-	if present {
-		return fmt.Errorf("condition name already exists. Please choose a new name or using the existing specifier")
-	}
-
 	maxSpecifier := -1.0
 	for _, condition := range codes.Conditions {
 		if condition.Specifier > maxSpecifier {
@@ -74,7 +65,9 @@ func AddCode(codes *LdLogCodesJson, className string, systemName string, conditi
 		}
 	}
 	newSpecifier := maxSpecifier + 1
-	codes.Conditions[conditionName] = Condition{
+
+	condition := Condition{
+		Name:        condName,
 		Description: description,
 		Specifier:   newSpecifier,
 		Class:       class.Specifier,
@@ -82,58 +75,37 @@ func AddCode(codes *LdLogCodesJson, className string, systemName string, conditi
 		Message:     message,
 	}
 
+	code := GetCode(condition)
+
+	_, present := codes.Conditions[code]
+	if present {
+		return fmt.Errorf("condition code already exists. Please choose a new code or the existing condition")
+	}
+
+	codes.Conditions[code] = condition
+
 	return nil
 }
 
 func DeprecateCode(codes *LdLogCodesJson, code string, reason string) error {
-	specifierStrings := strings.Split(code, ":")
-	systemSpec, err := strconv.ParseFloat(specifierStrings[0], 64)
-	if err != nil {
-		return err
-	}
-	classSpec, err := strconv.ParseFloat(specifierStrings[1], 64)
-	if err != nil {
-		return err
-	}
-	conditionSpec, err := strconv.ParseFloat(specifierStrings[2], 64)
-	if err != nil {
-		return err
-	}
-	conditionName, condition, present := collections.MapFind(codes.Conditions, func(s string, condition Condition) bool {
-		return condition.System == systemSpec && condition.Class == classSpec && condition.Specifier == conditionSpec
-	})
+	condition, present := codes.Conditions[code]
 	if !present {
 		return errors.New("cannot deprecate a condition which does not exist")
 	}
 	deprecated := true
 	condition.Deprecated = &deprecated
 	condition.DeprecatedReason = &reason
-	codes.Conditions[conditionName] = condition
+	codes.Conditions[code] = condition
 	return nil
 }
 
 func SupersedeCode(codes *LdLogCodesJson, code string, replacementCode string, reason string) error {
-	specifierStrings := strings.Split(code, ":")
-	systemSpec, err := strconv.ParseFloat(specifierStrings[0], 64)
-	if err != nil {
-		return err
-	}
-	classSpec, err := strconv.ParseFloat(specifierStrings[1], 64)
-	if err != nil {
-		return err
-	}
-	conditionSpec, err := strconv.ParseFloat(specifierStrings[2], 64)
-	if err != nil {
-		return err
-	}
-	conditionName, condition, present := collections.MapFind(codes.Conditions, func(s string, condition Condition) bool {
-		return condition.System == systemSpec && condition.Class == classSpec && condition.Specifier == conditionSpec
-	})
+	condition, present := codes.Conditions[code]
 	if !present {
 		return errors.New("cannot deprecate a condition which does not exist")
 	}
 	condition.Superseded = &replacementCode
 	condition.SupersededReason = &reason
-	codes.Conditions[conditionName] = condition
+	codes.Conditions[code] = condition
 	return nil
 }

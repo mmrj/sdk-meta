@@ -20,9 +20,12 @@
     },
     "conditions": {
       "type": "object",
-      "additionalProperties": {
-        "$ref": "#/$defs/condition"
-      }
+      "patternProperties": {
+        "^[0-9]+:[0-9]+:[0-9]+$": {
+          "$ref": "#/$defs/condition"
+        }
+      },
+      "additionalProperties": false
     }
   },
   "required": ["systems", "classes", "conditions"],
@@ -30,6 +33,7 @@
     "condition": {
       "type": "object",
       "required": [
+        "name",
         "specifier",
         "class",
         "system",
@@ -37,6 +41,9 @@
         "message"
       ],
       "properties": {
+        "name": {
+          "type": "string"
+        },
         "specifier": {
           "type": "number"
         },

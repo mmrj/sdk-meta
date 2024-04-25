@@ -15,32 +15,48 @@ type codeMarkdownWriter struct {
 
 func GenerateMarkdown(codes *LdLogCodesJson, outPath string) error {
 	cw := codeMarkdownWriter{
-		writer: markdown.NewWriter(),
+		writer: markdown.NewWriter(1),
 		codes:  codes,
 	}
 
-	collections.MapForEachOrdered(codes.Systems, func(systemName string, system System) {
-		cw.writeSystem(systemName)
+	cw.writeIntroduction()
+
+	cw.writer.WriteSection("Codes", func() {
+		collections.MapForEachOrdered(codes.Systems, func(systemName string, system System) {
+			cw.writeSystem(systemName)
+		})
 	})
 
 	return cw.writer.Save(outPath)
 }
 
-func (cw *codeMarkdownWriter) writeCondition(name string, condition Condition) {
+func (cw *codeMarkdownWriter) writeIntroduction() {
+	introductionPath := "logs/doc/fragments/introduction.md"
+	if _, err := os.Stat(introductionPath); err == nil {
+		fmt.Println("Fragment exists for:", introductionPath)
+		err = cw.writer.AppendMarkdown(introductionPath)
+		if err != nil {
+			_, _ = fmt.Fprintln(os.Stderr, fmt.Errorf("failed to write fragment for introduction, error: %w", err))
+		}
+	} else {
+		fmt.Println("No fragment exists for:", introductionPath)
+	}
+}
 
-	cw.writer.WriteSection(name, func() {
+func (cw *codeMarkdownWriter) writeCondition(code string, condition Condition) {
+	sectionName := fmt.Sprintf("%s - %s", code, condition.Name)
+	cw.writer.WriteSection(sectionName, func() {
 		sysName, _, _ := collections.MapFind(cw.codes.Systems, func(s string, system System) bool {
 			return system.Specifier == condition.System
 		})
 		className, _, _ := collections.MapFind(cw.codes.Classes, func(s string, class Class) bool {
 			return class.Specifier == condition.Class
 		})
-		fmt.Println("Writing condition:", name, "of system", sysName, "with class", className)
+		fmt.Println("Writing condition:", condition.Name, "of system", sysName, "with class", className)
 
 		cw.writer.WriteLn(condition.Description)
 		cw.writer.WriteBlankLn()
 
-		code := GetCode(condition)
 		cw.writer.WriteTableHeader("code", "system", "class")
 		cw.writer.WriteTableRow(code, sysName, className)
 
@@ -58,13 +74,13 @@ func (cw *codeMarkdownWriter) writeCondition(name string, condition Condition) {
 
 		})
 
-		fragment := fmt.Sprintf("logs/doc/fragments/%s_%s_%s.md", sysName, className, name)
+		fragment := fmt.Sprintf("logs/doc/fragments/%s_%s_%s.md", sysName, className, condition.Name)
 
 		if _, err := os.Stat(fragment); err == nil {
 			fmt.Println("Fragment exists for:", fragment)
 			err = cw.writer.AppendMarkdown(fragment)
 			if err != nil {
-				fmt.Fprintln(os.Stderr, fmt.Errorf("failed to write fragment for code: %s error: %w", name, err))
+				fmt.Fprintln(os.Stderr, fmt.Errorf("failed to write fragment for code: %s error: %w", condition.Name, err))
 			}
 		} else {
 			fmt.Println("No fragment exists for:", fragment)
@@ -82,8 +98,8 @@ func (cw *codeMarkdownWriter) writeSystem(name string) {
 			return condition.System == system.Specifier
 		})
 
-		collections.MapForEachOrdered(conditions, func(condName string, condition Condition) {
-			cw.writeCondition(condName, condition)
+		collections.MapForEachOrdered(conditions, func(code string, condition Condition) {
+			cw.writeCondition(code, condition)
 		})
 	})
 }

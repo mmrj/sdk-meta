@@ -22,12 +22,12 @@ func NewDeprecateForm(codes *logs.LdLogCodesJson, deprecate *DeprecateFormData) 
 				if !logs.ValidateCode(s) {
 					return errors.New("the code was not in the correct format")
 				}
-				for _, condition := range codes.Conditions {
-					if s == logs.GetCode(condition) {
-						return nil
-					}
+				_, present := codes.Conditions[s]
+
+				if !present {
+					return errors.New("could not find an existing entry matching the code")
 				}
-				return errors.New("could not find an existing entry matching the code")
+				return nil
 			}),
 		huh.NewInput().
 			Title("What is the reason the code is being deprecated?").

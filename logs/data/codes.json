@@ -6,19 +6,7 @@
     }
   },
   "conditions": {
-    "unknownOption": {
-      "class": 3,
-      "description": "This message indicates that an unrecognized configuration option was provided. This primarily applied to languages that are not strongly typed.",
-      "message": {
-        "parameterized": "Ignoring unknown config option \"${name}\"",
-        "parameters": {
-          "name": "The option that was not recognized."
-        }
-      },
-      "specifier": 2,
-      "system": 0
-    },
-    "wrongType": {
+    "0:3:1": {
       "class": 3,
       "description": "This message indicates that a configuration option was not of the correct type. This primarily applies to languages that are not strongly typed.",
       "message": {
@@ -30,7 +18,21 @@
           "name": "The name of the configuration option."
         }
       },
+      "name": "wrongType",
       "specifier": 1,
+      "system": 0
+    },
+    "0:3:2": {
+      "class": 3,
+      "description": "This message indicates that an unrecognized configuration option was provided. This primarily applied to languages that are not strongly typed.",
+      "message": {
+        "parameterized": "Ignoring unknown config option \"${name}\"",
+        "parameters": {
+          "name": "The option that was not recognized."
+        }
+      },
+      "name": "unknownOption",
+      "specifier": 2,
       "system": 0
     }
   },
@@ -38,14 +40,6 @@
     "configuration": {
       "description": "Conditions associated with SDK configuration.",
       "specifier": 0
-    },
-    "polling": {
-      "description": "This is responsible for polling.",
-      "specifier": 2
-    },
-    "streaming": {
-      "description": "Responsible for handling the streaming connection to LaunchDarkly.",
-      "specifier": 1
     }
   }
 }

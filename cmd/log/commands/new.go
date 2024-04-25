@@ -61,10 +61,17 @@ func runNewSystemCommand() {
 func runNewConditionCommand() {
 	err := logs.UpdateCodes(func(codes *logs.LdLogCodesJson) error {
 		var params forms.ConditionFormData
-		form := forms.NewConditionForm(codes, &params)
+		form := forms.NewConditionFormPart1(codes, &params)
 		err := form.Run()
+
 		if err != nil {
-			return fmt.Errorf("error running new condition form: %w", err)
+			return fmt.Errorf("error running new condition form part 1: %w", err)
+		}
+
+		form = forms.NewConditionFormPart2(codes, &params)
+		err = form.Run()
+		if err != nil {
+			return fmt.Errorf("error running new condition form part 2: %w", err)
 		}
 
 		parameters, err := logs.ParseMessage(params.MessageString)
@@ -72,21 +79,24 @@ func runNewConditionCommand() {
 			return fmt.Errorf("bad message string: %w", err)
 		}
 
-		var paramParams forms.ParameterFormData
-		parametersForm := forms.NewMessageForm(codes, parameters.Parameters, &paramParams)
-		err = parametersForm.Run()
-		if err != nil {
-			return fmt.Errorf("error running parameters form: %w", err)
-		}
 		message := logs.Message{
 			Parameters:    map[string]string{},
 			Parameterized: params.MessageString,
 		}
-		for key, value := range paramParams.Descriptions {
-			message.Parameters[key] = *value
+
+		if len(parameters.Parameters) != 0 {
+			var paramParams forms.ParameterFormData
+			parametersForm := forms.NewMessageForm(codes, parameters.Parameters, &paramParams)
+			err = parametersForm.Run()
+			if err != nil {
+				return fmt.Errorf("error running parameters form: %w", err)
+			}
+			for key, value := range paramParams.Descriptions {
+				message.Parameters[key] = *value
+			}
 		}
 
-		err = logs.AddCode(codes, params.Class, params.System, params.Name, params.Description, message)
+		err = logs.AddCondition(codes, params.Class, params.System, params.Name, params.Description, message)
 		if err == nil {
 			fmt.Printf("The \"%s\" condition has been added.", params.Name)
 		}
