@@ -3,6 +3,10 @@
     "usageError": {
       "description": "An error which represents a mis-use of an API and impedes correct functionality.",
       "specifier": 3
+    },
+    "usageWarning": {
+      "description": "A warning about the usage of an API or configuration. The usage or configuration does not interfere with operation, but is not recommended or may result in unexpected behavior. Setting the timeout for identification too high.",
+      "specifier": 4
     }
   },
   "conditions": {
@@ -40,6 +44,10 @@
     "configuration": {
       "description": "Conditions associated with SDK configuration.",
       "specifier": 0
+    },
+    "polling": {
+      "description": "Conditions related to polling.",
+      "specifier": 1
     }
   }
 }
