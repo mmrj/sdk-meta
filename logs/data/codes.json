@@ -10,7 +10,7 @@
     }
   },
   "conditions": {
-    "0:3:1": {
+    "0:3:0": {
       "class": 3,
       "description": "This message indicates that a configuration option was not of the correct type. This primarily applies to languages that are not strongly typed.",
       "message": {
@@ -23,10 +23,10 @@
         }
       },
       "name": "wrongType",
-      "specifier": 1,
+      "specifier": 0,
       "system": 0
     },
-    "0:3:2": {
+    "0:3:1": {
       "class": 3,
       "description": "This message indicates that an unrecognized configuration option was provided. This primarily applied to languages that are not strongly typed.",
       "message": {
@@ -36,7 +36,7 @@
         }
       },
       "name": "unknownOption",
-      "specifier": 2,
+      "specifier": 1,
       "system": 0
     }
   },
