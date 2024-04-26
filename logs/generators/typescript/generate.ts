@@ -73,14 +73,14 @@ async function main() {
   await writeLn("// This code is automatically generated and should not be manually edited.");
   await writeLn("");
 
-  for (let systemName of Object.keys(definitions.systems || {})) {
-    await withDocComment(async () => {
-      await writeCommentLn("Standardized log codes and messages.");
-    });
-    await scoped('export class LogMessages {', '}', async () => {
+  await withDocComment(async () => {
+    await writeCommentLn("Standardized log codes and messages.");
+  });
+  await scoped('export class LogMessages {', '}', async () => {
+    for (let systemName of Object.keys(definitions.systems || {})) {
       await writeSystem(systemName, definitions.systems![systemName]);
-    });
-  }
+    }
+  });
 
   async function writeClass(className: string, cls: Class, systemName: string, system: System) {
     await withDocComment(async () => {
@@ -101,7 +101,7 @@ async function main() {
       await writeCommentLn(system.description);
     });
     await scoped(`static ${capitalize(systemName)}  = class {`, '}', async () => {
-      for(let [className, cls] of Object.entries(definitions.classes)) {
+      for (let [className, cls] of Object.entries(definitions.classes)) {
         await writeClass(className, cls, systemName, system);
       }
     });

@@ -38,6 +38,24 @@
       "name": "unknownOption",
       "specifier": 1,
       "system": 0
+    },
+    "1:3:0": {
+      "class": 3,
+      "deprecated": true,
+      "deprecatedReason": "It was not a good idea.",
+      "description": "You did a bad polling thing.",
+      "message": {
+        "parameterized": "The ${blank} was how ${bad}.",
+        "parameters": {
+          "bad": "The bad thing.",
+          "blank": "The blank thing."
+        }
+      },
+      "name": "badPollThing",
+      "specifier": 0,
+      "superseded": "0:3:1",
+      "supersededReason": "Because 0:3:1 is better.",
+      "system": 1
     }
   },
   "systems": {

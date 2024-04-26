@@ -16,7 +16,7 @@ export class LogMessages {
        * This message indicates that a configuration option was not of the correct type. This primarily applies to languages that are not strongly typed.
       */
       static WrongType = class {
-        static readonly code = "0:3:1";
+        static readonly code = "0:3:0";
         /**
          * Generate a log string for this code.
          * 
@@ -27,14 +27,14 @@ export class LogMessages {
          * @param name The name of the configuration option.
         */
         static message(actualType: string, defaultValue: string, expectedType: string, name: string): string {
-          return `0:3:1 Config option "${name}" should be of type ${expectedType}, but received ${actualType}, using the default value (${defaultValue}).`;
+          return `0:3:0 Config option "${name}" should be of type ${expectedType}, but received ${actualType}, using the default value (${defaultValue}).`;
         }
       }
       /**
        * This message indicates that an unrecognized configuration option was provided. This primarily applied to languages that are not strongly typed.
       */
       static UnknownOption = class {
-        static readonly code = "0:3:2";
+        static readonly code = "0:3:1";
         /**
          * Generate a log string for this code.
          * 
@@ -42,9 +42,45 @@ export class LogMessages {
          * @param name The option that was not recognized.
         */
         static message(name: string): string {
-          return `0:3:2 Ignoring unknown config option "${name}"`;
+          return `0:3:1 Ignoring unknown config option "${name}"`;
         }
       }
+    }
+    /**
+     * A warning about the usage of an API or configuration. The usage or configuration does not interfere with operation, but is not recommended or may result in unexpected behavior. Setting the timeout for identification too high.
+    */
+    static UsageWarning = class {
+    }
+  }
+  /**
+   * Conditions related to polling.
+  */
+  static Polling  = class {
+    /**
+     * An error which represents a mis-use of an API and impedes correct functionality.
+    */
+    static UsageError = class {
+      /**
+       * You did a bad polling thing.
+      */
+      static BadPollThing = class {
+        static readonly code = "1:3:0";
+        /**
+         * Generate a log string for this code.
+         * 
+         * This function will automatically include the log code.
+         * @param bad The bad thing.
+         * @param blank The blank thing.
+        */
+        static message(bad: string, blank: string): string {
+          return `1:3:0 The ${blank} was how ${bad}.`;
+        }
+      }
+    }
+    /**
+     * A warning about the usage of an API or configuration. The usage or configuration does not interfere with operation, but is not recommended or may result in unexpected behavior. Setting the timeout for identification too high.
+    */
+    static UsageWarning = class {
     }
   }
 }
