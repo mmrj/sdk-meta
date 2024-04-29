@@ -10,7 +10,7 @@
     "generate": "npm run genSchema && npx ts-node generate.ts"
   },
   "author": "",
-  "license": "ISC",
+  "license": "Apache-2.0",
   "devDependencies": {
     "@types/node": "^20.12.7",
     "typescript": "^5.4.5",
