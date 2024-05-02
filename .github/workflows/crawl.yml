@@ -8,6 +8,8 @@ env:
   METADATA_DIR: metadata
 jobs:
   crawl:
+    permissions:
+      pull-requests: write
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
