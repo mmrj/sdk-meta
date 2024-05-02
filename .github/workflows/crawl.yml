@@ -58,6 +58,7 @@ jobs:
           branch: "metadata-update"
           title: "feat: update SDK metadata"
           commit-message: "feat: update SDK metadata"
+          team-reviewers: "launchdarkly/team-sdk"
           body: |
             SDK metadata has changed. This PR updates the existing `metadata.sqlite3` database and associated
             data products. 
