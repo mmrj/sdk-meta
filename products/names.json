@@ -25,7 +25,7 @@
   "roku": "Roku SDK",
   "ruby-server-sdk": "Ruby SDK",
   "rust-server-sdk": "Rust SDK",
-  "swift-client-sdk": "iOS",
-  "vercel": "Vercel",
-  "vue": "Vue"
+  "swift-client-sdk": "iOS SDK",
+  "vercel": "Vercel SDK",
+  "vue": "Vue SDK"
 }
