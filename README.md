@@ -57,3 +57,11 @@ just in case something is intermittently using them that we've forgotten about.
 
 ### what doesn't necessitate a new major version
 - Adding a new field
+
+
+## consumers
+
+Consumers of SDK metadata include:
+- [LaunchDarkly Docs](https://docs.launchdarkly.com/)
+
+Are you a consumer? Add a link here to receive communications when new features/changes are coming.
